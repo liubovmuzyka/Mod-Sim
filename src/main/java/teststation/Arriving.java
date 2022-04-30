@@ -8,6 +8,7 @@ import java.util.Random;
 
 public class Arriving extends Event {
 
+
     static Logger logger = Logger.getLogger(Arriving.class);
     public Arriving(int timeStamp, int peopleInCar) {
         super(timeStamp, peopleInCar);
@@ -15,6 +16,7 @@ public class Arriving extends Event {
 
     @Override
     public Testing generateFutureEvent(int entryTimeStamp, int carID, int peopleInCar) {
+
         Random rand = new Random();
         int newEventTimeStamp = entryTimeStamp + (int) (Math.random()*60)+60;;
         Testing event = new Testing(newEventTimeStamp, carID, peopleInCar);
@@ -26,7 +28,7 @@ public class Arriving extends Event {
         PropertyConfigurator.configure("log4j.properties");
 
         logger.info("The car "+ this.getCarID() + " arrived at " + this.getEntryTimeStamp() + " sek, as " +
-                eventList.carIDs.size() + " in the queue with " + this.getPeopleInCar() + " people " + "["+this.getClass().getName() + "]");
+                eventList.carIDs.size() + " in the queue with " + this.getPeopleInCar() + " people " + "["+this.getClass().getName() + "]" +  eventList.carIDs);
         System.out.println("Arrived car "+ this.getCarID());
 
     }
