@@ -24,7 +24,7 @@ public class Testing extends Event
 
         logger.info("The car "+ this.getCarID() + " came to test at " + this.getEntryTimeStamp() + " sek" + " with " + this.getPeopleInCar() + " people " + "["+this.getClass().getName() + "]");
 
-        System.out.println("Testing car "+ this.getCarID());
+        //System.out.println("Testing car "+ this.getCarID());
 
     }
 

@@ -1,6 +1,7 @@
 package teststation;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Queue;
 import java.util.Random;
 
@@ -17,51 +18,71 @@ public class Simulation {
         Arriving newEvent = new Arriving(this.startTime, this.peopleInCar);
         eventList.events.add(newEvent);
         eventList.carIDs.add(newEvent.getCarID());
+        newEvent.printLn(eventList);
     }
 
     int amountOfCars = 1;
     int amountOfPeople = 1;
-    int amountOfCarsWithNoPlace = 1;
+    int amountOfCarsWithNoPlace = 0;
     int amountOfTestingCars = 1;
+    int amountOfIteration = 1;
+    HashMap<Integer, Integer> amountOfArrivingTime = new HashMap<>();
+    HashMap<Integer, Integer> amountOfLeavingTime = new HashMap<>();
+    HashMap<Integer, Pair<Integer,Integer>> amountOfArrivingTimeAndLeaving = new HashMap<>();
+    ArrayList<Integer> amountOfDwellTime = new ArrayList<>();
+
+    public void setAmountOfArrivingTimeAndLeaving(){
+        amountOfArrivingTime.forEach((k, v) -> {
+            amountOfArrivingTimeAndLeaving.put(k, new Pair<>(v, amountOfLeavingTime.get(k)));
+        });
+
+        amountOfArrivingTimeAndLeaving.forEach((k, v) -> amountOfDwellTime.add(v.getV()- v.getU()));
+        System.out.println(amountOfArrivingTime.size());
+        System.out.println(amountOfLeavingTime.size());
+    }
 
     public void run(int capacity) {
 
-        Random rand = new Random();
         int newArrival = 0;
         int entryTimeStamp = this.startTime;
         Event result = getThisEvent();
 
         while (eventList.events.size() > 0) {
-            result.printLn(eventList);
+            amountOfIteration++;
+            if (result instanceof Testing || result instanceof Leaving) {
+                result.printLn(eventList);
+            }
             if (eventList.carIDs.size() < capacity) {
                 int intervalNewArrival = (int) (Math.random()*90)+30;
                 int newPeopleInCar = (int) (Math.random()*4)+1;
                 newArrival = entryTimeStamp + intervalNewArrival;
-                if (newArrival < 7200) {
+                if (newArrival < 600) {
 
-                    Arriving newEvent = new Arriving(newArrival, newPeopleInCar);
+                    Arriving newEvent = new Arriving(newArrival, newPeopleInCar);;
+                    amountOfArrivingTime.put(newEvent.getCarID(), newArrival);
+                    amountOfTestingCars +=eventList.carIDs.size();
                     amountOfCars++;
                     amountOfPeople += newPeopleInCar;
                     eventList.events.add(newEvent);
                     eventList.carIDs.add(newEvent.getCarID());
+                    newEvent.printLn(eventList);
                     entryTimeStamp = newArrival;
 
                 }
             } else {
-                //System.out.println("The queue is full");
-                amountOfCarsWithNoPlace++;
+                if (result instanceof Arriving) {
+                    System.out.println("The queue is full");
+                    amountOfCarsWithNoPlace++;
+                }
             }
-            if (result.getClass().getName().equals("teststation.Testing")){
-                amountOfTestingCars++;
+
+            if (result instanceof Leaving) {
+                amountOfLeavingTime.put(result.getCarID(), result.getEntryTimeStamp());
             }
             addNewEvent(result);
             result = getThisEvent();
 
         }
-
-        System.out.println("On average in one car are sitting: " + (double)amountOfPeople/amountOfCars +" people.");
-        System.out.println(amountOfCarsWithNoPlace + " cars leave the testing station because the queue is full");
-        //System.out.println("On average in the testing lane are: " + (double)amountOfTestingCars/amountOfCars +" cars.");
 
     }
 

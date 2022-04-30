@@ -17,7 +17,6 @@ public class Arriving extends Event {
     @Override
     public Testing generateFutureEvent(int entryTimeStamp, int carID, int peopleInCar) {
 
-        Random rand = new Random();
         int newEventTimeStamp = entryTimeStamp + (int) (Math.random()*60)+60;;
         Testing event = new Testing(newEventTimeStamp, carID, peopleInCar);
         return event;
@@ -29,7 +28,7 @@ public class Arriving extends Event {
 
         logger.info("The car "+ this.getCarID() + " arrived at " + this.getEntryTimeStamp() + " sek, as " +
                 eventList.carIDs.size() + " in the queue with " + this.getPeopleInCar() + " people " + "["+this.getClass().getName() + "]" +  eventList.carIDs);
-        System.out.println("Arrived car "+ this.getCarID());
+        //System.out.println("Arrived car "+ this.getCarID());
 
     }
 }

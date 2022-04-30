@@ -2,7 +2,7 @@ package teststation;
 
 public abstract class Event {
     private int entryTimeStamp;
-    private static int initCarID = 1;
+    private static int initCarID = 0;
     public int carID;
     private int peopleInCar;
 
