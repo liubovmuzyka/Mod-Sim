@@ -28,5 +28,10 @@ public class Testing extends Event
 
     }
 
+    @Override
+    public void printLnNoSpace(Eventlist eventList) {
+
+    }
+
 
 }

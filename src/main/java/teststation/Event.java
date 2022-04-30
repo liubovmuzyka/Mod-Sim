@@ -52,6 +52,7 @@ public abstract class Event {
 
     public abstract Event generateFutureEvent(int entryTimeStamp, int carID, int peopleInCar);
     public abstract void printLn(Eventlist eventList);
+    public abstract void printLnNoSpace(Eventlist eventList);
 }
 
 

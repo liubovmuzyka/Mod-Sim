@@ -31,4 +31,9 @@ public class Arriving extends Event {
         //System.out.println("Arrived car "+ this.getCarID());
 
     }
+
+    @Override
+    public void printLnNoSpace(Eventlist eventList) {
+        logger.info("The car "+ this.getCarID() +" with " + this.getPeopleInCar() + " people came and goes");
+    }
 }

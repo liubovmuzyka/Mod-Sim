@@ -18,6 +18,7 @@ public class Simulation {
         Arriving newEvent = new Arriving(this.startTime, this.peopleInCar);
         eventList.events.add(newEvent);
         eventList.carIDs.add(newEvent.getCarID());
+        amountOfArrivingTime.put(newEvent.getCarID(), (this.startTime));
         newEvent.printLn(eventList);
     }
 
@@ -28,17 +29,18 @@ public class Simulation {
     int amountOfIteration = 1;
     HashMap<Integer, Integer> amountOfArrivingTime = new HashMap<>();
     HashMap<Integer, Integer> amountOfLeavingTime = new HashMap<>();
-    HashMap<Integer, Pair<Integer,Integer>> amountOfArrivingTimeAndLeaving = new HashMap<>();
+    HashMap<Integer, Pair<Integer, Integer>> amountOfArrivingTimeAndLeaving = new HashMap<>();
     ArrayList<Integer> amountOfDwellTime = new ArrayList<>();
 
-    public void setAmountOfArrivingTimeAndLeaving(){
+    public void setAmountOfArrivingTimeAndLeaving() {
         amountOfArrivingTime.forEach((k, v) -> {
             amountOfArrivingTimeAndLeaving.put(k, new Pair<>(v, amountOfLeavingTime.get(k)));
         });
 
-        amountOfArrivingTimeAndLeaving.forEach((k, v) -> amountOfDwellTime.add(v.getV()- v.getU()));
-        System.out.println(amountOfArrivingTime.size());
-        System.out.println(amountOfLeavingTime.size());
+        amountOfArrivingTimeAndLeaving.forEach((k, v) -> amountOfDwellTime.add(v.getV() - v.getU()));
+        //System.out.println(amountOfArrivingTime.size());
+        //System.out.println(amountOfArrivingTime.toString());
+        //System.out.println(amountOfLeavingTime.toString());
     }
 
     public void run(int capacity) {
@@ -52,39 +54,43 @@ public class Simulation {
             if (result instanceof Testing || result instanceof Leaving) {
                 result.printLn(eventList);
             }
-            if (eventList.carIDs.size() < capacity) {
-                int intervalNewArrival = (int) (Math.random()*90)+30;
-                int newPeopleInCar = (int) (Math.random()*4)+1;
-                newArrival = entryTimeStamp + intervalNewArrival;
-                if (newArrival < 600) {
-
-                    Arriving newEvent = new Arriving(newArrival, newPeopleInCar);;
-                    amountOfArrivingTime.put(newEvent.getCarID(), newArrival);
-                    amountOfTestingCars +=eventList.carIDs.size();
-                    amountOfCars++;
-                    amountOfPeople += newPeopleInCar;
-                    eventList.events.add(newEvent);
-                    eventList.carIDs.add(newEvent.getCarID());
-                    newEvent.printLn(eventList);
-                    entryTimeStamp = newArrival;
-
-                }
-            } else {
-                if (result instanceof Arriving) {
-                    System.out.println("The queue is full");
-                    amountOfCarsWithNoPlace++;
-                }
-            }
-
             if (result instanceof Leaving) {
                 amountOfLeavingTime.put(result.getCarID(), result.getEntryTimeStamp());
             }
+            if (result instanceof Testing) {
+                amountOfTestingCars++;
+            }
+            int intervalNewArrival = (int) (Math.random() * 90) + 30;
+            int newPeopleInCar = (int) (Math.random() * 4) + 1;
+            newArrival = entryTimeStamp + intervalNewArrival;
+            Arriving newEvent = new Arriving(newArrival, newPeopleInCar);
+            if (eventList.carIDs.size() < capacity) {
+                if (newArrival < 7200) {
+                    eventList.events.add(newEvent);
+                    eventList.carIDs.add(newEvent.getCarID());
+                    newEvent.printLn(eventList);
+
+                    amountOfArrivingTime.put(newEvent.getCarID(), newArrival);
+                    amountOfCars++;
+                    amountOfPeople += newPeopleInCar;
+
+                    entryTimeStamp = newArrival;
+                }
+            } else {
+                amountOfCars++;
+                amountOfPeople += newPeopleInCar;
+                //amountOfArrivingTime.put(newEvent.getCarID(), newArrival);
+                // amountOfLeavingTime.put(newEvent.getCarID(), newArrival);
+                newEvent.printLnNoSpace(eventList);
+                amountOfCarsWithNoPlace++;
+            }
+
             addNewEvent(result);
             result = getThisEvent();
-
         }
 
     }
+
 
     public Event getThisEvent() {
         return eventList.events.peek();

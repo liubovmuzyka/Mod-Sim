@@ -30,4 +30,9 @@ public class Leaving extends Event
         //System.out.println("Leaving car "+ this.getCarID());
     }
 
+    @Override
+    public void printLnNoSpace(Eventlist eventList) {
+
+    }
+
 }

@@ -27,7 +27,12 @@ public class Leaving extends Event
 
         logger.info("The car "+ this.getCarID() + " is leaving test station at " + this.getEntryTimeStamp() + " sek, with " + this.getPeopleInCar() + " people " + "["+this.getClass().getName() + "]");
 
-        System.out.println("Leaving car "+ this.getCarID());
+        //System.out.println("Leaving car "+ this.getCarID());
+    }
+
+    @Override
+    public void printLnNoSpace(Eventlist eventList) {
+
     }
 
 }
