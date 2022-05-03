@@ -18,10 +18,6 @@ public abstract class Event {
         this.peopleInCar = peopleInCar;
     }
 
-    public int setNewCarID() {
-        return initCarID++;
-    }
-
     public Event processEvent(Eventlist eventList) {
         Event currentEvent = eventList.events.peek();
 
@@ -36,7 +32,6 @@ public abstract class Event {
         return newEvent;
     }
 
-    ;
 
     public int getCarID() {
         return carID;
@@ -50,8 +45,14 @@ public abstract class Event {
         return peopleInCar;
     }
 
+    public int setNewCarID() {
+        return initCarID++;
+    }
+
     public abstract Event generateFutureEvent(int entryTimeStamp, int carID, int peopleInCar);
+
     public abstract void printLn(Eventlist eventList);
+
     public abstract void printLnNoSpace(Eventlist eventList);
 }
 
